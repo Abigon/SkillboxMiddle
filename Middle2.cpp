@@ -43,10 +43,12 @@ public:
 		array_y = other.array_y;
 		if (other.info)
 		{
+			if (info) delete info;
 			info = new std::string(*(other.info));
 		}
 		if (other.array)
 		{
+			DeleteArray();
 			InitArray();
 			CopyArray(other.array);
 		}
@@ -56,17 +58,11 @@ public:
 
 	~TestClass()
 	{
-		if (array)
-		{
-			for (int i = 0; i < array_x; i++) {
-				delete[] array[i];
-			}
-			delete[] array;
-		}
 		if (info)
 		{
 			delete info;
 		}
+		DeleteArray();
 		std::cout << "destructor\n";
 	}
 
@@ -88,6 +84,17 @@ public:
 			{
 				array[i][w] = other[i][w];
 			}
+		}
+	}
+
+	void DeleteArray()
+	{
+		if (array)
+		{
+			for (int i = 0; i < array_x; i++) {
+				delete[] array[i];
+			}
+			delete[] array;
 		}
 	}
 
