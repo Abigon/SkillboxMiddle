@@ -38,16 +38,12 @@ int main()
     try
     {
         fr = new Fraction(num, den);
+        std::cout << "Result: " << fr->Result() << "\n";
+        delete fr;
     }
     catch (std::exception & exception)
     {
         std::cout << "Exception: " << exception.what() << "\n";
-    }
-
-    if (fr)
-    {
-        std::cout << "Result: " << fr->Result() << "\n";
-        delete fr;
     }
 
     return 0;
