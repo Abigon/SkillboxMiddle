@@ -94,6 +94,44 @@ int main()
     std::copy(m_IntArray.cbegin(), m_IntArray.cend(), m_IntArrayCopy.begin());
     std::cout << "m_IntArrayCopy after copy: \n";
     std::for_each(m_IntArrayCopy.cbegin(), m_IntArrayCopy.cend(), [](int n) { std::cout << n << " "; });
+    std::cout << "\n\n\n";
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Homework 6.4
+    // generate
+
+    std::cout << "-------  Homework 6.4 ------- \n\n";
+
+    srand(time(0));
+    std::vector<int> m_GenerateVector(10);
+
+    // generate int from 0 to 99 
+    std::generate(m_GenerateVector.begin(), m_GenerateVector.end(), []() {return rand() % 100; });
+
+    std::cout << "generate result: \n";
+    std::for_each(m_GenerateVector.cbegin(), m_GenerateVector.cend(), [](int n) { std::cout << n << " "; });
+    std::cout << "\n\n";
+
+    // Homework 6.4
+    // transform
+
+    // multiply the values in m_GenerateVector by 2 
+    std::transform(m_GenerateVector.cbegin(), m_GenerateVector.cend(), m_GenerateVector.begin(), [](int n) { return n * 2; });
+
+    std::cout << "transform result: \n";
+    std::for_each(m_GenerateVector.cbegin(), m_GenerateVector.cend(), [](int n) { std::cout << n << " "; });
+    std::cout << "\n\n";
+
+
+    // Homework 6.4
+    // remove_if
+
+    // remove all values in m_GenerateVector above 100
+    m_GenerateVector.erase(std::remove_if(m_GenerateVector.begin(), m_GenerateVector.end(), [](int n) { return n > 100; }), m_GenerateVector.end());
+
+    std::cout << "remove_if result: \n";
+    std::for_each(m_GenerateVector.cbegin(), m_GenerateVector.cend(), [](int n) { std::cout << n << " "; });
     std::cout << "\n\n";
 
 }
