@@ -77,7 +77,7 @@ int main()
     // fill for std::array
     // fill the array with 3 
     std::cout << "fill result: \n";
-    std::cout << "befour fill: \n";
+    std::cout << "before fill: \n";
     std::for_each(m_IntArray.cbegin(), m_IntArray.cend(), [](int n) { std::cout << n << " "; });
     std::cout << "\n";
 
@@ -127,11 +127,20 @@ int main()
     // Homework 6.4
     // remove_if
 
-    // remove all values in m_GenerateVector above 100
-    m_GenerateVector.erase(std::remove_if(m_GenerateVector.begin(), m_GenerateVector.end(), [](int n) { return n > 100; }), m_GenerateVector.end());
+    std::vector<int> m_RemoveVector(10);
+
+    // generate int from 0 to 9 
+    std::generate(m_RemoveVector.begin(), m_RemoveVector.end(), []() {return rand() % 10; });
+
+    std::cout << " before remove_if: \n";
+    std::for_each(m_RemoveVector.cbegin(), m_RemoveVector.cend(), [](int n) { std::cout << n << " "; });
+    std::cout << "\n\n";
+
+    // remove all values in m_RemoveVector less than 3
+    m_RemoveVector.erase(std::remove_if(m_RemoveVector.begin(), m_RemoveVector.end(), [](int n) { return n < 3; }), m_RemoveVector.end());
 
     std::cout << "remove_if result: \n";
-    std::for_each(m_GenerateVector.cbegin(), m_GenerateVector.cend(), [](int n) { std::cout << n << " "; });
+    std::for_each(m_RemoveVector.cbegin(), m_RemoveVector.cend(), [](int n) { std::cout << n << " "; });
     std::cout << "\n\n";
 
 }
