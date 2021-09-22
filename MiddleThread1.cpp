@@ -11,6 +11,11 @@
 
 using namespace std;
 
+const int Producer1DataAmount = 7;
+const int Producer2DataAmount = 8;
+const int Producer3DataAmount = 3;
+const int TotalDataAmount = Producer1DataAmount + Producer2DataAmount + Producer3DataAmount;
+
 struct InfoStruct
 {
     std::string Name;
@@ -21,7 +26,7 @@ struct InfoStruct
 
 mutex MutexVector;
 
-std::string gen_random_str(const int MaxLen) 
+std::string gen_random_str(const int MaxLen)
 {
     int len = rand() % MaxLen + 1;
 
@@ -44,7 +49,7 @@ void Producer1(vector<InfoStruct>& VectorToFill)
 {
     const int ProducerID = 1;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < Producer1DataAmount; i++)
     {
         this_thread::sleep_for(chrono::milliseconds(1000));
 
@@ -55,7 +60,7 @@ void Producer1(vector<InfoStruct>& VectorToFill)
         Element.Name = gen_random_str(20);
 
         MutexVector.lock();
-        VectorToFill.push_back(Element);        
+        VectorToFill.push_back(Element);
         MutexVector.unlock();
     }
 }
@@ -64,7 +69,7 @@ void Producer2(vector<InfoStruct>& VectorToFill)
 {
     const int ProducerID = 2;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < Producer2DataAmount; i++)
     {
 
         this_thread::sleep_for(chrono::milliseconds(1500));
@@ -85,7 +90,7 @@ void Producer3(vector<InfoStruct>& VectorToFill)
 {
     const int ProducerID = 3;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < Producer3DataAmount; i++)
     {
         this_thread::sleep_for(chrono::milliseconds(500));
 
@@ -105,7 +110,7 @@ void SortVector(vector<InfoStruct>& VectorToSort, bool& bIsAll)
 {
     MutexVector.lock();
     std::sort(VectorToSort.begin(), VectorToSort.end(), [](InfoStruct a, InfoStruct b) { return a.Name < b.Name; });
-    if (VectorToSort.size() >= 15)
+    if (VectorToSort.size() >= TotalDataAmount)
     {
         bIsAll = true;
     }
@@ -138,7 +143,7 @@ void PrintVector(const vector<InfoStruct>& VectorToPrint, bool& bIsAll)
     {
         printf("%-20s %5d %10.4f %4d \n", Element.Name.c_str(), Element.Count, Element.Duration, Element.ProducerID);
     }
-    if (VectorToPrint.size() >= 15)
+    if (VectorToPrint.size() >= TotalDataAmount)
     {
         bIsAll = true;
     }
@@ -163,7 +168,7 @@ int main()
     thread RunProducer2([&]()
         {
             Producer2(InfoVector);
-        });   
+        });
     thread RunProducer3([&]()
         {
             Producer3(InfoVector);
