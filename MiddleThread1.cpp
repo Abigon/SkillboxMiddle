@@ -5,6 +5,7 @@
 #include <ctime>
 #include <mutex>
 #include <vector>
+#include <random>
 #include <algorithm>
 
 #include <Windows.h>
@@ -26,9 +27,20 @@ struct InfoStruct
 
 mutex MutexVector;
 
+int GetRandomInRange(const int min, const int max)
+{
+    static default_random_engine gen(
+        static_cast<unsigned>(
+            chrono::system_clock::now().time_since_epoch().count()
+            )
+    );
+    uniform_int_distribution<int> distribution(min, max);
+    return distribution(gen);
+}
+
 std::string gen_random_str(const int MaxLen)
 {
-    int len = rand() % MaxLen + 1;
+    int len = GetRandomInRange(2, MaxLen);
 
     std::string tmp_s;
     static const char alphanum[] =
@@ -40,7 +52,7 @@ std::string gen_random_str(const int MaxLen)
 
     for (int i = 0; i < len; ++i)
     {
-        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+        tmp_s += alphanum[GetRandomInRange(0, sizeof(alphanum) - 1)];
     }
     return tmp_s;
 }
@@ -54,8 +66,8 @@ void Producer1(vector<InfoStruct>& VectorToFill)
         this_thread::sleep_for(chrono::milliseconds(1000));
 
         InfoStruct Element;
-        Element.Count = rand() % 100;
-        Element.Duration = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 10));
+        Element.Count = GetRandomInRange(0, 100);
+        Element.Duration = static_cast <float> (GetRandomInRange(0, RAND_MAX)) / (static_cast <float> (RAND_MAX / 10));
         Element.ProducerID = ProducerID;
         Element.Name = gen_random_str(20);
 
@@ -75,8 +87,8 @@ void Producer2(vector<InfoStruct>& VectorToFill)
         this_thread::sleep_for(chrono::milliseconds(1500));
 
         InfoStruct Element;
-        Element.Count = rand() % 100;
-        Element.Duration = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 10));
+        Element.Count = GetRandomInRange(0, 100);
+        Element.Duration = static_cast <float> (GetRandomInRange(0, RAND_MAX)) / (static_cast <float> (RAND_MAX / 10));
         Element.ProducerID = ProducerID;
         Element.Name = gen_random_str(20);
 
@@ -95,8 +107,8 @@ void Producer3(vector<InfoStruct>& VectorToFill)
         this_thread::sleep_for(chrono::milliseconds(500));
 
         InfoStruct Element;
-        Element.Count = rand() % 100;
-        Element.Duration = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 10));
+        Element.Count = GetRandomInRange(0, 100);
+        Element.Duration = static_cast <float> (GetRandomInRange(0, RAND_MAX)) / (static_cast <float> (RAND_MAX / 10));
         Element.ProducerID = ProducerID;
         Element.Name = gen_random_str(20);
 
@@ -155,8 +167,6 @@ int main()
     chrono::time_point<chrono::steady_clock> StartClock, EndClock;
     chrono::duration<float> DurationClock;
     StartClock = chrono::high_resolution_clock::now();
-
-    srand(static_cast<unsigned int>(time(0)));
 
     vector<InfoStruct> InfoVector;
     InfoVector.clear();
